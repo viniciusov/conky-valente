@@ -119,8 +119,8 @@ ${if_match "${execpi 600 sed -n '28p' $HOME/.conky/daily_forecast}" == "Lo"}${go
 ${goto 10}${voffset 0}${font Alien Encounters:size=9}$color1 SYSTEM ${hr 2}$color
 ${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU1: ${cpu cpu1}%  (${freq_g} GHz) ${alignr}${cpugraph cpu1 8,60 B3F2FF 72CBDC}${color}
 ${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU2: ${cpu cpu2}% ${alignr}${cpugraph cpu2 8,60 B3F2FF 72CBDC}${color}
-${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU3: ${cpu cpu3}% ${alignr}${cpugraph cpu3 8,60 B3F2FF 72CBDC}${color}
-${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU4: ${cpu cpu4}% ${alignr}${cpugraph cpu4 8,60 B3F2FF 72CBDC}${color}
+#${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU3: ${cpu cpu3}% ${alignr}${cpugraph cpu3 8,60 B3F2FF 72CBDC}${color}
+#${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU4: ${cpu cpu4}% ${alignr}${cpugraph cpu4 8,60 B3F2FF 72CBDC}${color}
 ${goto 10}$color0${font ConkySymbols:size=12}j${font}${color0}  RAM:  $mem${color0} / ${color0}$memmax ${color0} ($memperc%) $color0${alignr}${memgraph cpu2 8,60 B3F2FF 72CBDC}${color}
 ${goto 10}${color0}${font ConkySymbols:size=12}h${font}$color0  TEMP:${alignr}${execi 4 sensors | grep "Package" | cut -d "+" -f2 | cut -c1-7}
 #${goto 10}${color0}${font ConkySymbols:size=12}h${font}$color0  CPU2:${goto 108}${execi 4 sensors | grep "Core 1" | cut -d "+" -f2 | cut -c1-5,5}${alignr} ºC
