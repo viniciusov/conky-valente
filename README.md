@@ -6,7 +6,7 @@
 - Run (**without sudo**):  
 `./install.sh` (it will automatically prompt for your root password) 
   
-*Note: In ther first run, the application will find the weather conditions and will update the weather in conky after 10 minutes (you should see some blank spaces before that). 
+*Note: In the first run, the application will find the weather conditions and will update the weather in conky after 10 minutes (you should see some blank spaces before that). 
 Alternatively, you can run `killall conky` followed by `/usr/share/conky_valente/start_conky_font.sh` to manually update the conditions.*
 
 ### Configuration
