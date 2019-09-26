@@ -3,9 +3,9 @@
 ![Conky Example](https://github.com/viniciusov/conky-valente/blob/master/screenshot/screenshot.png)
   
 ### Basic Instalation
-- Clone this repository:
+- Clone this repository:  
 `git clone https://github.com/viniciusov/conky-valente` 
-- Enter the directory:
+- Enter the directory:  
 `cd conky-valente/` 
 - Run (**without sudo**):  
 `./install.sh` (it will automatically prompt for your root password) 
