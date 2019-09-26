@@ -1,0 +1,15 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Name=conky-valente
+Comment=Modern Conky to monitor you Computer
+Exec=/usr/share/conky_valente/start_conky_font.sh %f
+Icon=conky_valente.png
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;Utility;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Component=general
+
+Name[en_US.UTF-8]=conky-valente

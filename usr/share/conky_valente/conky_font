@@ -1,0 +1,157 @@
+# Use Xft?
+use_xft yes
+xftfont ubuntu:size=8
+xftalpha 0.8
+text_buffer_size 2048
+
+# Update interval in seconds
+update_interval 2.0
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+own_window_type dock
+own_window_argb_visual yes
+own_window_argb_value 100
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+own_window_colour 000000
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+minimum_size 220 1024
+maximum_width 220
+
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders no
+
+# Stippled borders?
+stippled_borders 0
+
+# border margins
+border_inner_margin 5
+
+# border width
+border_width 1
+draw_graph_borders yes
+
+default_color white
+#default_shade_color black
+#default_outline_color white
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 5
+gap_y 0
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+if_up_strictness address
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+# Add spaces to keep things from moving about?  This only affects certain objects.
+use_spacer none
+short_units yes
+pad_percents 2
+imlib_cache_size 0
+
+top_name_width 10
+update_interval 3
+
+# Color Title.
+color0 cccccc
+color1 92CFFF #73F2FF
+color2 777777
+
+TEXT
+${goto 10}${voffset 8}${font Alien Encounters:size=9}$color1 WEATHER ${hr 2}${color}${texeci 50 bash /usr/share/conky_valente/conky_weather/1_accuweather -f}
+${goto 75}${voffset 0}$color2${font conkyweather:size=80}${execi 60 sed -n '22p' $HOME/.conky/curr_cond}${font}
+${voffset -100}${font}${goto 10}$color0 Temperature: $color0${alignr}${execpi 600 sed -n '2p' $HOME/.conky/curr_cond}°C (${execpi 60 sed -n '3p' $HOME/.conky/curr_cond}°C)
+${goto 10}$color0 Wind Speed: $color0${alignr}${execpi 600 sed -n '6p' $HOME/.conky/curr_cond} 
+${goto 10}$color0 Humidity: $color0${alignr}${execpi 600 sed -n '7p' $HOME/.conky/curr_cond}
+#${goto 10}$color0 Pressure: $color0${alignr}${execpi 600 sed -n '8p' $HOME/.conky/curr_cond}
+${goto 10}$color0 UV index: $color0${alignr}${execpi 600 sed -n '9p' $HOME/.conky/curr_cond} 
+${goto 10}$color0 Cloudiness: $color0${alignr}${execpi 600 sed -n '10p' $HOME/.conky/curr_cond}
+${goto 10}$color0 Ceiling: $color0${alignr}${execpi 600 sed -n '11p' $HOME/.conky/curr_cond}
+#${goto 10}$color0 Dew point: $color0${alignr}${execpi 600 sed -n '12p' $HOME/.conky/curr_cond}°C
+${goto 10}$color0 Visibility: $color0${alignr}${execpi 600 sed -n '13p' $HOME/.conky/curr_cond}
+${goto 10}$color0 Sun R/S: $color0${alignr}${execpi 600 sed -n '14p' $HOME/.conky/curr_cond}  /  ${execpi 600 sed -n '15p' $HOME/.conky/curr_cond}
+#${goto 10}${hr 1}
+
+${goto 20} $color0${execpi 600 sed -n '2p' $HOME/.conky/daily_forecast}${goto 95}${execpi 600 sed -n '42p' $HOME/.conky/daily_forecast}${goto 170}${execpi 600 sed -n '82p' $HOME/.conky/daily_forecast}$color1$font
+${voffset 2}${goto 10} ${font conkyweather:size=30}$color0${execi 600  sed -n '601p' $HOME/.conky/daily_forecast}${goto 85}${execi 600  sed -n '602p' $HOME/.conky/daily_forecast}${goto 160}${execi 600  sed -n '603p' $HOME/.conky/daily_forecast}${font}$color
+${voffset -35}${goto 55}$color0${execpi 600 sed -n '7p' $HOME/.conky/daily_forecast}°C${goto 128}${execpi 600 sed -n '47p' $HOME/.conky/daily_forecast}°C${goto 201} ${execpi 600 sed -n '87p' $HOME/.conky/daily_forecast}°C
+${if_match "${execpi 600 sed -n '28p' $HOME/.conky/daily_forecast}" == "Lo"}${goto 55}${execpi 600 sed -n '28p' $HOME/.conky/daily_forecast}w${else}${goto 55}${execpi 600 sed -n '28p' $HOME/.conky/daily_forecast}°C${endif}${goto 128}${execpi 600 sed -n '68p' $HOME/.conky/daily_forecast}°C${goto 201} ${execpi 600 sed -n '108p' $HOME/.conky/daily_forecast}°C
+
+#${goto 10}${hr 1}
+#${goto 10}${voffset 8}${font Alien Encounters:size=9}$color1 TIME ${hr 2}${color0}
+#${goto 10}${voffset -5}${hr 2}${color0}
+#${voffset -15}${font Digital Readout Thick Upright:size=40}${alignc}${time %H:%M:%S}${font}
+#${goto 10}${voffset -10}${font Alien Encounters:size=9}$color1 CALENDAR ${hr 2}${color}
+# ${voffset -1}${font Monospace:size=9}${color0}${execpi 300 DJS=`date +%_d`; ncal -b -h|sed '1,8!d'| sed '/./!d' | sed 's/^/${goto 65} /'| sed 's/$/ /' | sed 's/^/ /' | sed /" $DJS "/s/" $DJS "/" "'${font Ubuntu:style=Bold:size=8}${voffset -1}${color1} '"$DJS"'${color1}${font Monospace:size=8}'" "/}${voffset -1}
+${goto 10}${voffset 0}${font Alien Encounters:size=9}$color1 SYSTEM ${hr 2}$color
+${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU1: ${cpu cpu1}%  (${freq_g} GHz) ${alignr}${cpugraph cpu1 8,60 B3F2FF 72CBDC}${color}
+${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU2: ${cpu cpu2}% ${alignr}${cpugraph cpu2 8,60 B3F2FF 72CBDC}${color}
+${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU3: ${cpu cpu3}% ${alignr}${cpugraph cpu3 8,60 B3F2FF 72CBDC}${color}
+${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU4: ${cpu cpu4}% ${alignr}${cpugraph cpu4 8,60 B3F2FF 72CBDC}${color}
+${goto 10}$color0${font ConkySymbols:size=12}j${font}${color0}  RAM:  $mem${color0} / ${color0}$memmax ${color0} ($memperc%) $color0${alignr}${memgraph cpu2 8,60 B3F2FF 72CBDC}${color}
+${goto 10}${color0}${font ConkySymbols:size=12}h${font}$color0  TEMP:${alignr}${execi 4 sensors | grep "Package" | cut -d "+" -f2 | cut -c1-7}
+#${goto 10}${color0}${font ConkySymbols:size=12}h${font}$color0  CPU2:${goto 108}${execi 4 sensors | grep "Core 1" | cut -d "+" -f2 | cut -c1-5,5}${alignr} ºC
+#${goto 10}${color1}${font ConkySymbols:size=12}h${font}$color0  GPU:${alignr}${execi 4 nvidia-settings -q gpucoretemp |grep Attribute |awk '{print $4}' |cut -c1-2}.0 °C
+#${goto 10}${color1}${font ConkySymbols:size=12}h${font}$color0  HD root:${alignr}${execi 4 sensors | grep -A 0 'temp3' | cut -c16-19} ºC
+#${goto 10}${color1}${font ConkySymbols:size=12}h${font}$color0  HD slave:${alignr}${execi 4 sensors | grep -A 0 'temp3' | cut -c16-19} ºC
+${goto 10}$color0${font ConkySymbols:size=12}l${font}$color0  FAN:${alignr}${execi 4 sensors | grep -A 0 'fan1' | cut -c10-18} RPM
+
+${goto 10}${font Alien Encounters:size=9}$color1 PROCESSES ${hr 2}$color0${font}
+${goto 10}${voffset 3}${color0} NAME${alignr}CPU(%)   MEM(%)
+${goto 10}${voffset 3}${color0} ${top name 1} ${alignr}${top cpu 1}          ${top mem 1} 
+${goto 10}${color0} ${top name 2} ${alignr}${top cpu 2}          ${top mem 2} 
+${goto 10}${color0} ${top name 3} ${alignr}${top cpu 3}          ${top mem 3} 
+${goto 10}${color0} ${top name 4} ${alignr}${top cpu 4}          ${top mem 4} 
+${goto 10}${color0} ${top name 5} ${alignr}${top cpu 5}          ${top mem 5} 
+${goto 10}${color0} ${top name 6} ${alignr}${top cpu 6}          ${top mem 6} 
+${goto 10}${color0} ${top name 7} ${alignr}${top cpu 7}          ${top mem 7} 
+${goto 10}${color0} ${top name 8} ${alignr}${top cpu 8}          ${top mem 8} 
+
+${goto 10}${font Alien Encounters:size=9}$color1 HDD ${hr 2}$color0${font}
+${goto 10}${voffset 5}$color0${font ConkySymbols:size=12}k$color0${font}  ${voffset -5}Boot: ${goto 65}${fs_used /boot} / ${fs_size /boot} (${fs_used_perc /boot}%) $color0${alignr}${fs_bar 8,60 /boot}
+${goto 10}${voffset 5}$color0${font ConkySymbols:size=12}k$color0${font}$color0  ${voffset -5}Root: ${goto 65}${fs_used /} / ${fs_size /} (${fs_used_perc /}%) $color0${alignr}${fs_bar 8,60 /}
+${goto 10}${voffset 5}$color0${font ConkySymbols:size=12}k$color0${font}  ${voffset -5}Home: ${goto 65}${fs_used /home} / ${fs_size /home} (${fs_used_perc /home}%) $color0${alignr}${fs_bar 8,60 /home}
+${goto 10}${voffset 5}$color0${font ConkySymbols:size=12}k$color0${font}  ${voffset -5}Swap: ${goto 65}$swap / $swapmax ($swapperc%) $color0${alignr}${swapbar 8,60}
+
+${goto 10}${voffset 4}${font Alien Encounters:size=9}$color1 NETWORK ${hr 2}$color0${font}
+${goto 10}${voffset 4}${font PizzaDude Bullets:size=12}O${font}  Up: ${upspeed wlp2s0}b/s ${alignr}${upspeedgraph wlp2s0 8,60 B3F2FF 72CBDC}
+${goto 10}${voffset 4}${font PizzaDude Bullets:size=12}U${font}  Down: ${downspeed wlp2s0}b/s ${alignr}${downspeedgraph wlp2s0 8,60 B3F2FF 72CBDC}
+
+${goto 10}${voffset 0}${font Alien Encounters:size=9}$color1 OS ${hr 2}$color0${font}
+${goto 10}${voffset 5} Distro: ${execi 999 sed -r 's/.{5}$//' /etc/issue}${font}${color0} 
+${goto 10}${voffset -11} Kernel: $sysname - $kernel 
+${goto 10}${voffset 2} Uptime: $uptime
+${goto 10}${voffset 1} ${execi 999 xfce4-session --version | grep -A 0 'xfce4' | cut -c01-21}${font bold:size=4}${color0} 

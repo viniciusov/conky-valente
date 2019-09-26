@@ -1,0 +1,289 @@
+#!/usr/bin/env bash
+
+#########################################################################################
+# Put the command that launches the conky configuration file that uses this script here #
+#########################################################################################
+weather_conky_launch_command="conky -b"
+
+#####################################
+# Put your Accuweather address here #
+#####################################
+#address="http://www.accuweather.com/en/de/lichtenstein/09350/weather-forecast/171261"
+address="http://www.accuweather.com/en/br/araraquara/36343/weather-forecast/36343"
+
+#Pause weather conky
+pkill -STOP -xf "$weather_conky_launch_command"
+
+#function: test_image
+test_image () {
+    case $1 in
+         1)
+           echo a
+         ;;
+         2|3)
+           echo b
+         ;;
+         4|5)
+           echo c
+         ;;
+         6)
+           echo d
+         ;;
+         7)
+           echo e
+         ;;
+         8)
+           echo f
+         ;;
+         11)
+           echo 0
+         ;;
+         12)
+           echo h
+         ;;
+         13|14)
+           echo g
+         ;;
+         15)
+           echo m
+         ;;
+         16|17)
+           echo k
+         ;;
+         18)
+           echo i
+         ;;
+         19)
+           echo q
+         ;;
+         20|21|23)
+           echo o
+         ;;
+         22)
+           echo r
+         ;;
+         24|31)
+           echo E
+         ;;
+         25)
+           echo v
+         ;;
+         26)
+           echo x
+         ;;
+         29)
+           echo y
+         ;;
+         30)
+           echo 5
+         ;;
+         32)
+           echo 6
+         ;;
+         33)
+           echo A
+         ;;
+         34|35)
+           echo B
+         ;;
+         36|37)
+           echo C
+         ;;
+         38)
+           echo D
+         ;;
+         39|40)
+           echo G
+         ;;
+         41|42)
+           echo K
+         ;;
+         43|44)
+           echo O
+         ;;
+         *)
+		   echo -
+		 ;;
+        esac
+}
+
+############################
+# Check the user arguments #
+############################
+
+if (( $# < 1 || $# > 15 )); then
+	echo "Invalid arguments!"
+	exit
+fi
+
+last_number=$(echo $address|sed 's/^.*\///')
+
+#############################################################
+# NORMAL FORECAST: -f, -f2015 or -f2016 passed as arguments #
+#############################################################
+
+#function: convert_time
+convert_time ()
+{
+	hours=$(echo $1|awk -F ":| " '{print $1}')
+	minutes=$(echo $1|awk -F ":| " '{print $2}')
+	am_or_pm=$(echo $1|awk -F ":| " '{print $3}')
+	if [[ $am_or_pm == AM ]]; then
+		if (( $hours < 10 )); then
+			hours_24=0$hours
+		fi
+		if (( $hours == 10 || $hours == 11 )); then
+			hours_24=$hours
+		fi
+		if (( $hours == 12 )); then
+			hours_24=00
+		fi
+	elif [[ $am_or_pm == PM ]]; then
+		if (( $hours != 12 )); then
+			hours_24=$((hours+12))
+		fi
+		if (( $hours == 12 )); then
+			hours_24=12
+		fi
+	fi
+	time_24=$hours_24:$minutes
+	echo $time_24
+}
+
+#function: test_wind
+test_wind () {
+    case $1 in
+         CLM)
+           echo -
+         ;;
+         S)
+           echo 1
+         ;;
+         SSW)
+           echo 2
+         ;;
+         SW)
+           echo 3
+         ;;
+         WSW)
+           echo 4
+         ;;
+         W)
+           echo 5
+         ;;
+         WNW)
+           echo 6
+         ;;
+         NW)
+           echo 7
+         ;;
+         NNW)
+           echo 8
+         ;;
+         N)
+           echo 9
+         ;;
+         NNE)
+           echo :
+         ;;
+         NE)
+           echo ;
+         ;;
+         ENE)
+           echo \<
+         ;;
+         E)
+           echo =
+         ;;
+         ESE)
+           echo \>
+         ;;
+         SE)
+           echo ?
+         ;;
+         SSE)
+           echo @
+         ;;
+    esac
+}
+
+mkdir $HOME/.conky
+
+curr_addr="$(echo $address|sed 's/weather-forecast.*$//')"current-weather/"$last_number"
+w3m -dump_source "$curr_addr" -o accept_encoding='identity;q=0' > $HOME/.conky/curr_cond_raw
+
+daily_addr="$(echo $address|sed 's/weather-forecast.*$//')"daily-weather-forecast/"$last_number"
+w3m -dump_source "$daily_addr" -o accept_encoding='identity;q=0' > $HOME/.conky/daily_forecast
+
+#current conditions
+if [[ -s $HOME/.conky/curr_cond_raw ]]; then
+	sed -i '/var sunMoon\|var curCon/!d' $HOME/.conky/curr_cond_raw
+	sed -i -e 's/^.*extended":{"//' -e 's/^.*moon":{"//' -e 's/,/:/g' -e 's/{"category.*value":/"/' -e 's/}:/":/g' -e 's/icon":/icon":"/' -e 's/:"now/":"now/' -e 's/"};//' -e 's/windDeg":/windDeg":"/' -e 's/°//g' -e 's/":"sun":{/:/' -e 's/"}};//' $HOME/.conky/curr_cond_raw
+	awk 'FNR==2 { print $24 }' FS="\":\"" $HOME/.conky/curr_cond_raw > $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $32 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $30 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $28 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $20 }' FS="\":\"" $HOME/.conky/curr_cond_raw|awk '{ print $3 }' >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $20 }' FS="\":\"" $HOME/.conky/curr_cond_raw|awk '{ print $1, $2 }' >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $10 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $12 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $16 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $4 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $2 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $6 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==2 { print $18 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==1 { print $10 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==1 { print $12 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==1 { print $8 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	echo 'EMPTY LINE FOR COMPATIBILITY WITH THE OLD CONKYRC FILES' >> $HOME/.conky/curr_cond
+	awk 'FNR==1 { print $4 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==1 { print $6 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	awk 'FNR==1 { print $2 }' FS="\":\"" $HOME/.conky/curr_cond_raw >> $HOME/.conky/curr_cond
+	echo 'EMPTY LINE FOR COMPATIBILITY WITH THE OLD CONKYRC FILES' >> $HOME/.conky/curr_cond
+
+    image=$(sed -n 1p $HOME/.conky/curr_cond)
+    echo $(test_image $image) >> $HOME/.conky/curr_cond
+	sunrise_time=$(sed -n 14p $HOME/.conky/curr_cond)
+	echo $(convert_time "$sunrise_time") >> $HOME/.conky/curr_cond
+	sunrise_time=$(sed -n 15p $HOME/.conky/curr_cond)
+	echo $(convert_time "$sunrise_time") >> $HOME/.conky/curr_cond
+	sunrise_time=$(sed -n 18p $HOME/.conky/curr_cond)
+	echo $(convert_time "$sunrise_time") >> $HOME/.conky/curr_cond
+	sunrise_time=$(sed -n 19p $HOME/.conky/curr_cond)
+	echo $(convert_time "$sunrise_time") >> $HOME/.conky/curr_cond
+	wind=$(sed -n 5p $HOME/.conky/curr_cond)
+	echo $(test_wind $wind) >> $HOME/.conky/curr_cond
+    if (( $(sed -n 14p /$HOME/.conky/curr_cond|wc -c) == 8 )); then
+		sed -i '14s/^/0/' $HOME/.conky/curr_cond
+	fi
+	if (( $(sed -n 15p /$HOME/.conky/curr_cond|wc -c) == 8 )); then
+		sed -i '15s/^/0/' $HOME/.conky/curr_cond
+	fi
+	if (( $(sed -n 18p /$HOME/.conky/curr_cond|wc -c) == 8 )); then
+		sed -i '18s/^/0/' $HOME/.conky/curr_cond
+	fi
+	if (( $(sed -n 19p /$HOME/.conky/curr_cond|wc -c) == 8 )); then
+		sed -i '19s/^/0/' $HOME/.conky/curr_cond
+	fi
+fi
+
+#Daily forecast
+if [[ -s $HOME/.conky/daily_forecast ]]; then
+	sed -i '/var dailyForecast/!d' $HOME/.conky/daily_forecast
+	sed -i -e 's/var dailyForecast = \[//' -e 's/","\|":"/\n/g' -e 's/icon":/icon\n/g' -e 's/,"phrase/\nphrase/g' -e 's/temp":/temp\n/g' -e 's/},"dow/\ndow/g' -e 's/":{"dTemp/\ndTemp/g' $HOME/.conky/daily_forecast
+	sed -i -e 's/}}.*,"date/\ndate/' -e 's/}}];//g' -e '1s/^.*$/date/' -e 's/°//g' $HOME/.conky/daily_forecast
+    sed -i '601,$d' $HOME/.conky/daily_forecast
+    for (( i=9; i<=569; i+=40 ))
+	do
+		image=$(sed -n "${i}"p $HOME/.conky/daily_forecast)
+	    echo $(test_image $image) >> $HOME/.conky/daily_forecast
+	done
+	for (( i=30; i<=590; i+=40 ))
+	do
+		image=$(sed -n "${i}"p $HOME/.conky/daily_forecast)
+	    echo $(test_image $image) >> $HOME/.conky/daily_forecast
+	done
+fi
+
+#Resume weather conky
+pkill -CONT -xf "$weather_conky_launch_command"
