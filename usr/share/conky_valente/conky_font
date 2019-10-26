@@ -91,7 +91,7 @@ color1 92CFFF #73F2FF
 color2 777777
 
 TEXT
-#${goto 10}${voffset 8}${font Alien Encounters:size=10}$color1 WEATHER ${hr 2}${color}${texeci 500 bash /usr/share/conky_lobo/conky_weather/1_accuweather -f}
+#${goto 10}${voffset 8}${font Alien Encounters:size=10}$color1 WEATHER ${hr 2}${color}${texeci 500 bash /usr/share/conky_valente/conky_weather/1_accuweather -f}
 #${goto 75}${voffset 0}$color2${font conkyweather:size=80}${execi 600 sed -n '22p' $HOME/.conky/curr_cond}${font}
 #${voffset -100}${font}${goto 10}$color0 Temperature: $color0${alignr}${execpi 600 sed -n '2p' $HOME/.conky/curr_cond}°C (${execpi 600 sed -n '3p' $HOME/.conky/curr_cond}°C)
 #${goto 10}$color0 Wind Speed: $color0${alignr}${execpi 600 sed -n '6p' $HOME/.conky/curr_cond} 
@@ -118,9 +118,9 @@ ${goto 10}${font Alien Encounters:size=10}$color1 CALENDAR ${hr 2}${color}
 ${voffset 10}${font Monospace:size=8}${color0}${execpi 300 DJS=`date +%_d`; ncal -b -h|sed '1,8!d'| sed '/./!d' | sed 's/^/${goto 55} /'| sed 's/$/ /' | sed 's/^/ /' | sed /" $DJS "/s/" $DJS "/" "'${font Monospace:style=Bold:size=8}${voffset -1}${color1}'"$DJS"'${color0}${font Monospace:size=8}'" "/}${voffset -1}
 ${goto 10}${voffset 0}${font Alien Encounters:size=10}$color1 SYSTEM ${hr 2}$color
 ${goto 10}${voffset 5}$color0${font ConkySymbols:size=12}f${font}$color0  CPU1: ${cpu cpu1}%  (${freq_g} GHz) ${alignr}${cpugraph cpu1 8,60 B3F2FF 72CBDC}${color}
-${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU2: ${cpu cpu2}% ${alignr}${cpugraph cpu2 8,60 B3F2FF 72CBDC}${color}
-${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU3: ${cpu cpu3}% ${alignr}${cpugraph cpu3 8,60 B3F2FF 72CBDC}${color}
-${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU4: ${cpu cpu4}% ${alignr}${cpugraph cpu4 8,60 B3F2FF 72CBDC}${color}
+#${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU2: ${cpu cpu2}% ${alignr}${cpugraph cpu2 8,60 B3F2FF 72CBDC}${color}
+#${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU3: ${cpu cpu3}% ${alignr}${cpugraph cpu3 8,60 B3F2FF 72CBDC}${color}
+#${goto 10}$color0${font ConkySymbols:size=12}f${font}$color0  CPU4: ${cpu cpu4}% ${alignr}${cpugraph cpu4 8,60 B3F2FF 72CBDC}${color}
 ${goto 10}$color0${font ConkySymbols:size=12}j${font}${color0}  RAM:  $mem${color0} / ${color0}$memmax ${color0} ($memperc%) $color0${alignr}${memgraph cpu2 8,60 B3F2FF 72CBDC}${color}
 ${goto 10}${color0}${font ConkySymbols:size=12}h${font}$color0  TEMP:${alignr}${execi 4 sensors | grep "Package" | cut -d "+" -f2 | cut -c1-7}
 #${goto 10}${color0}${font ConkySymbols:size=12}h${font}$color0  CPU2:${goto 108}${execi 4 sensors | grep "Core 1" | cut -d "+" -f2 | cut -c1-5,5}${alignr} ºC
@@ -154,7 +154,7 @@ ${goto 10}${voffset 4}${font PizzaDude Bullets:size=12}O${font}  Up: ${upspeed w
 ${goto 10}${voffset 4}${font PizzaDude Bullets:size=12}U${font}  Down: ${downspeed wlp2s0}b/s ${alignr}${downspeedgraph wlp2s0 8,60 B3F2FF 72CBDC}
 
 ${goto 10}${voffset 0}${font Alien Encounters:size=10}$color1 OS ${hr 2}$color0${font}
-${goto 10}${voffset 5} Distro: ${execi 999 sed -r 's/.{5}$//' /etc/issue}${font}${color0} 
+${goto 10}${voffset 5} Distro: ${execi 999 sed -r 's/.{5}$//' /etc/issue}${font}
 ${goto 10}${voffset -11} Kernel: $sysname - $kernel 
 ${goto 10}${voffset 2} Uptime: $uptime
 #${goto 10}${voffset 2} Battery: ${battery_percent BAT1}%
